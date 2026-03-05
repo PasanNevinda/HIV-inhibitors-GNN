@@ -1,0 +1,148 @@
+loading datasets.........
+train_set_size:32568 | val_set_size:4440
+no checkpoint found. starting from epoch 0.
+Starting new MLflow run: 3d97f1f2f4d34c8a87517c2979a6a365
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:14<00:00, 34.94it/s]
+Type:train | Epoch:0 | Acc: 0.5773 | Prec: 0.5796 | Rec: 0.5453 | F1: 0.5620 | AUC: 0.6059
+Epoch: 0 | Train loss: 0.6793570261978453
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:12<00:00, 39.72it/s]
+Type:train | Epoch:1 | Acc: 0.5973 | Prec: 0.6091 | Rec: 0.5433 | F1: 0.5743 | AUC: 0.6330
+Epoch: 1 | Train loss: 0.6653578449338052
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:13<00:00, 37.43it/s]
+Type:train | Epoch:2 | Acc: 0.6014 | Prec: 0.6141 | Rec: 0.5464 | F1: 0.5783 | AUC: 0.6399
+Epoch: 2 | Train loss: 0.6613075763199435
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:12<00:00, 39.24it/s]
+Type:train | Epoch:3 | Acc: 0.6105 | Prec: 0.6212 | Rec: 0.5797 | F1: 0.5997 | AUC: 0.6535
+Epoch: 3 | Train loss: 0.6557355493826879
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......:  71%|███████   | 362/509 [00:09<00:03, 41.11it/s]WARNING:pyngrok.process.ngrok:t=2026-03-03T08:48:24+0000 lvl=warn msg="failed to open private leg" id=b9ab4cab789e privaddr=localhost:5000 err="dial tcp [::1]:5000: connect: connection refused"
+Training......: 100%|██████████| 509/509 [00:13<00:00, 38.02it/s]
+Type:train | Epoch:4 | Acc: 0.6034 | Prec: 0.6108 | Rec: 0.5726 | F1: 0.5911 | AUC: 0.6462
+Epoch: 4 | Train loss: 0.6596111800769598
+Validation......: 100%|██████████| 70/70 [00:01<00:00, 41.43it/s]
+Type:Validation | Epoch:4 | Acc: 0.9658 | Prec: 0.0000 | Rec: 0.0000 | F1: 0.0000 | AUC: 0.5873
+checkpoint saved: /content/drive/MyDrive/GNNs/HIV inhibitors-GNN/outputs/checkpoints/latest_checkpoint.tar
+Epoch: 4 | Validation loss: 0.1544276125527717
+checkpoint saved: /content/drive/MyDrive/GNNs/HIV inhibitors-GNN/outputs/checkpoints/best_model.tar
+New best AUC: 0.5873 at epoch 4
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:13<00:00, 38.82it/s]
+Type:train | Epoch:5 | Acc: 0.6055 | Prec: 0.6103 | Rec: 0.5639 | F1: 0.5861 | AUC: 0.6476
+Epoch: 5 | Train loss: 0.6579715049082335
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:13<00:00, 37.47it/s]
+Type:train | Epoch:6 | Acc: 0.6062 | Prec: 0.6145 | Rec: 0.5715 | F1: 0.5922 | AUC: 0.6507
+Epoch: 6 | Train loss: 0.6551563099074265
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:14<00:00, 36.24it/s]
+Type:train | Epoch:7 | Acc: 0.6111 | Prec: 0.6212 | Rec: 0.5626 | F1: 0.5904 | AUC: 0.6517
+Epoch: 7 | Train loss: 0.6568244732998713
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:13<00:00, 36.72it/s]
+Type:train | Epoch:8 | Acc: 0.6130 | Prec: 0.6233 | Rec: 0.5758 | F1: 0.5986 | AUC: 0.6587
+Epoch: 8 | Train loss: 0.6525906686026176
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:13<00:00, 38.72it/s]
+Type:train | Epoch:9 | Acc: 0.6117 | Prec: 0.6224 | Rec: 0.5752 | F1: 0.5979 | AUC: 0.6577
+Epoch: 9 | Train loss: 0.6528018832616682
+Validation......: 100%|██████████| 70/70 [00:01<00:00, 67.34it/s]
+Type:Validation | Epoch:9 | Acc: 0.9658 | Prec: 0.0000 | Rec: 0.0000 | F1: 0.0000 | AUC: 0.5928
+checkpoint saved: /content/drive/MyDrive/GNNs/HIV inhibitors-GNN/outputs/checkpoints/latest_checkpoint.tar
+Epoch: 9 | Validation loss: 0.164884672240094
+checkpoint saved: /content/drive/MyDrive/GNNs/HIV inhibitors-GNN/outputs/checkpoints/best_model.tar
+New best AUC: 0.5928 at epoch 9
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:13<00:00, 38.46it/s]
+Type:train | Epoch:10 | Acc: 0.6111 | Prec: 0.6183 | Rec: 0.5747 | F1: 0.5957 | AUC: 0.6571
+Epoch: 10 | Train loss: 0.6517176847292732
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:13<00:00, 37.92it/s]
+Type:train | Epoch:11 | Acc: 0.6131 | Prec: 0.6224 | Rec: 0.5819 | F1: 0.6014 | AUC: 0.6610
+Epoch: 11 | Train loss: 0.6505901244839823
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:13<00:00, 37.90it/s]
+Type:train | Epoch:12 | Acc: 0.6095 | Prec: 0.6173 | Rec: 0.5686 | F1: 0.5919 | AUC: 0.6548
+Epoch: 12 | Train loss: 0.6533617296022093
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:13<00:00, 38.85it/s]
+Type:train | Epoch:13 | Acc: 0.6180 | Prec: 0.6275 | Rec: 0.5737 | F1: 0.5994 | AUC: 0.6654
+Epoch: 13 | Train loss: 0.6485597086432993
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......:  59%|█████▉    | 302/509 [00:08<00:06, 31.41it/s]WARNING:pyngrok.process.ngrok:t=2026-03-03T08:50:41+0000 lvl=warn msg="failed to open private leg" id=65b70070a585 privaddr=localhost:5000 err="dial tcp [::1]:5000: connect: connection refused"
+Training......: 100%|██████████| 509/509 [00:13<00:00, 38.54it/s]
+Type:train | Epoch:14 | Acc: 0.6164 | Prec: 0.6262 | Rec: 0.5803 | F1: 0.6024 | AUC: 0.6626
+Epoch: 14 | Train loss: 0.6497828626743964
+Validation......: 100%|██████████| 70/70 [00:01<00:00, 68.58it/s]
+Type:Validation | Epoch:14 | Acc: 0.9658 | Prec: 0.0000 | Rec: 0.0000 | F1: 0.0000 | AUC: 0.5872
+checkpoint saved: /content/drive/MyDrive/GNNs/HIV inhibitors-GNN/outputs/checkpoints/latest_checkpoint.tar
+Epoch: 14 | Validation loss: 0.1482822306521304
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:13<00:00, 38.17it/s]
+Type:train | Epoch:15 | Acc: 0.6178 | Prec: 0.6264 | Rec: 0.5907 | F1: 0.6080 | AUC: 0.6689
+Epoch: 15 | Train loss: 0.6456337788859915
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:13<00:00, 38.90it/s]
+Type:train | Epoch:16 | Acc: 0.6164 | Prec: 0.6269 | Rec: 0.5859 | F1: 0.6057 | AUC: 0.6637
+Epoch: 16 | Train loss: 0.647940580776358
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:13<00:00, 38.78it/s]
+Type:train | Epoch:17 | Acc: 0.6183 | Prec: 0.6226 | Rec: 0.5776 | F1: 0.5992 | AUC: 0.6705
+Epoch: 17 | Train loss: 0.6445225232416452
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:12<00:00, 39.17it/s]
+Type:train | Epoch:18 | Acc: 0.6205 | Prec: 0.6282 | Rec: 0.5828 | F1: 0.6047 | AUC: 0.6673
+Epoch: 18 | Train loss: 0.6463382349820138
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:12<00:00, 39.56it/s]
+Type:train | Epoch:19 | Acc: 0.6180 | Prec: 0.6283 | Rec: 0.5997 | F1: 0.6137 | AUC: 0.6699
+Epoch: 19 | Train loss: 0.6452256242727009
+Validation......: 100%|██████████| 70/70 [00:00<00:00, 71.09it/s]
+Type:Validation | Epoch:19 | Acc: 0.9658 | Prec: 0.0000 | Rec: 0.0000 | F1: 0.0000 | AUC: 0.6095
+checkpoint saved: /content/drive/MyDrive/GNNs/HIV inhibitors-GNN/outputs/checkpoints/latest_checkpoint.tar
+Epoch: 19 | Validation loss: 0.1475257313466287
+checkpoint saved: /content/drive/MyDrive/GNNs/HIV inhibitors-GNN/outputs/checkpoints/best_model.tar
+New best AUC: 0.6095 at epoch 19
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:12<00:00, 39.43it/s]
+Type:train | Epoch:20 | Acc: 0.6231 | Prec: 0.6312 | Rec: 0.5851 | F1: 0.6072 | AUC: 0.6731
+Epoch: 20 | Train loss: 0.6426251731232794
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:12<00:00, 40.58it/s]
+Type:train | Epoch:21 | Acc: 0.6161 | Prec: 0.6251 | Rec: 0.5873 | F1: 0.6056 | AUC: 0.6676
+Epoch: 21 | Train loss: 0.6462647176966038
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:12<00:00, 40.43it/s]
+Type:train | Epoch:22 | Acc: 0.6173 | Prec: 0.6251 | Rec: 0.5794 | F1: 0.6014 | AUC: 0.6656
+Epoch: 22 | Train loss: 0.6464427145304594
+Training......:   0%|          | 0/509 [00:00<?, ?it/s]/usr/local/lib/python3.12/dist-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+Training......: 100%|██████████| 509/509 [00:12<00:00, 41.22it/s]
+Type:train | Epoch:23 | Acc: 0.6120 | Prec: 0.6221 | Rec: 0.5808 | F1: 0.6007 | AUC: 0.6630
+Epoch: 23 | Train loss: 0.6477657014074445
