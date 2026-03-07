@@ -13,15 +13,32 @@ import time
 from src.utils.utils import *
 from configs.config import GNN_GAT_PARAMS
 
+import argparse
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-ROOT = "/content/drive/MyDrive/GNNs/HIV inhibitors-GNN/data"
+ROOT = "/content/drive/MyDrive/GNNs/HIV inhibitors-GNN/data" 
 seed = 42
 torch.manual_seed(seed)
 torch_geometric.seed_everything(seed)
 
 
-def train_one_epoch(model, dataloader, optimizer, loss_fun, epoch, should_log_cm=False):
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="GAT GNN Training Script")
+    parser.add_argument('--use_pos_weight', type=int, default=1, 
+                        help="Whether to use pos_weight in BCEWithLogitsLoss (1=yes, 0=no)")
+    parser.add_argument('--use_weighted_sampler', type=int, default=1, 
+                        help="Whether to use WeightedRandomSampler for training loader (1=yes, 0=no)")
+    
+    parser.add_argument('--epochs', type=int, default=100, 
+                        help="Number of epochs")
+
+    return parser.parse_args()
+
+
+
+def train_one_epoch(model, dataloader, optimizer, loss_fun, epoch):
     model.train()
     all_probs =[]
     all_label= []
@@ -43,14 +60,12 @@ def train_one_epoch(model, dataloader, optimizer, loss_fun, epoch, should_log_cm
     all_label = np.concatenate(all_label).ravel()
 
 
-    roc_auc = cal_matrics(all_label, all_probs, epoch, type="train")
-    if(should_log_cm):
-        log_confusion_matrix_and_roc(all_label, all_probs, prefix="Train")
+    average_precision = cal_matrics(all_label, all_probs, epoch, type="train")
 
-    return all_loss / len(dataloader.dataset), roc_auc
+    return all_loss / len(dataloader.dataset), average_precision
 
 
-def test(model, dataloader, loss_fun, epoch=None, mode="Validation", should_log_cm=False):
+def test(model, dataloader, loss_fun, epoch=None, mode="Validation", should_log_cm=False, Final=False):
     model.eval()
     all_probs =[]
     all_label= []
@@ -71,32 +86,36 @@ def test(model, dataloader, loss_fun, epoch=None, mode="Validation", should_log_
     all_label = np.concatenate(all_label).ravel()
 
 
-    roc_auc = cal_matrics(all_label, all_probs, epoch, type=mode)
+    average_precision = cal_matrics(all_label, all_probs, epoch, type=mode, Final=Final)
     if(should_log_cm):
-        log_confusion_matrix_and_roc(all_label, all_probs, prefix=mode)
+        log_confusion_matrix_and_pr_curve(all_label, all_probs, prefix=mode)
 
-    return all_loss / len(dataloader.dataset) , roc_auc
+    return all_loss / len(dataloader.dataset) , average_precision
 
 
-def run_one_training(params, epochs=100):
+def run_one_training(params, epochs=100, use_pos_weight=False, use_weighted_sampler=False):
     
     print("loading datasets.........")
     train_dataset = MoleculeInMemoryDataset(root=ROOT, filename="HIV_train_val.csv")
     test_dataset = MoleculeInMemoryDataset(root=ROOT, filename="HIV_test.csv", test=True)
     
     #derived
+    print("\nDerived parameters......")
     node_feature_size = train_dataset.num_node_features
     params["model_edge_dim"] = train_dataset.num_edge_features
 
-    
-    train_loader, val_loader, test_loader, pos_weight = get_train_val_test_loaders_posweight(train_dataset, test_dataset, val_portion=0.12, batch_size=params["batch_size"], seed=seed)
+    print("\nGet loaders..................")
+    train_loader, val_loader, test_loader, pos_weight = get_train_val_test_loaders_posweight(train_dataset, test_dataset, val_portion=0.12, batch_size=params["batch_size"], seed=seed, use_pos_weight=use_pos_weight, use_weighted_sampler=use_weighted_sampler)
    
+    print("\nCreate Model.................")
     model_params = {k:v for k,v in params.items() if k.startswith("model_")}
     model = GNN_GAT(feature_size=node_feature_size, parameters=model_params)
     model = model.to(device)
 
     pos_weight = pos_weight.to(device)
 
+    print("\nCreate loss function and Optimizer.................")
+    
     loss_fn = torch.nn.BCEWithLogitsLoss(pos_weight=pos_weight)
     optimizer = torch.optim.SGD(
         params=model.parameters(),
@@ -105,7 +124,9 @@ def run_one_training(params, epochs=100):
         weight_decay=params["sgd_weight_dacay"]
     )
     
-    start_epoch, best_roc_auc, saved_run_id = load_checkpoint(model, optimizer, device)
+    print("\nLoad Checkpoint.................")
+    run_name = f"GAT-GNN- With_WeightedSampler{use_weighted_sampler} -WithPosWeigh{use_pos_weight} -Rdkit-features"
+    start_epoch, best_average_precision, best_loss, saved_run_id = load_checkpoint(model, optimizer, device, filename=f"{run_name}-latest_checkpoint.tar")
     
     if saved_run_id is not None:
         print("Resuming MLflow run:", saved_run_id)
@@ -113,43 +134,82 @@ def run_one_training(params, epochs=100):
         run_id = saved_run_id
     else:
         mlflow.end_run()  
-        run = mlflow.start_run(run_name="GAT_GNN")
+        run = mlflow.start_run(run_name=run_name)
         run_id = run.info.run_id
         print("Starting new MLflow run:", run_id)
 
+        print("\nLog Params in MLflow.........................")
         for key in params.keys():
             mlflow.log_param(key=key, value=params[key])
     
-        mlflow.log_param(key="weighted sampler", value=True)
+        mlflow.log_param("Use weighted sampler", use_weighted_sampler)
+        mlflow.log_param("Use Pos weight", use_pos_weight)
         mlflow.log_param("pos_weight", float(pos_weight.item()))
 
+        mlflow.log_param("Features", "Rdkit Features")
+
+    print("\n\n\nStart training loop.....................\n\n")
     for epoch in range(start_epoch, epochs):
-        loss, train_roc_auc = train_one_epoch(model,train_loader, optimizer, loss_fn, epoch)
-        print(f"Epoch: {epoch} | Train loss: {loss}")
+        loss, train_average_precision = train_one_epoch(model,train_loader, optimizer, loss_fn, epoch)
+        print(f"Epoch: {epoch} | Train loss: {loss}\n\n")
         mlflow.log_metric(key="Train loss", value=float(loss), step=epoch)
 
         if((epoch + 1) % 5 == 0):
-            val_loss, val_roc_auc = test(model, val_loader, loss_fn, epoch)
-            save_checkpoint(model, optimizer, epoch, val_roc_auc, run_id)
-            print(f"Epoch: {epoch} | Validation loss: {val_loss}")
+            print(f"-----------------------------Validation Start at {epoch}-------------------------------")
+            val_loss, val_average_precision = test(model, val_loader, loss_fn, epoch)
+            print("Saving Checkpoint..........................")
+            save_checkpoint(model, optimizer, epoch, best_average_precision, best_loss, run_id, filename=f"{run_name}-latest_checkpoint.tar")
+            print(f"Epoch: {epoch} | Validation loss: {val_loss}\n")
             mlflow.log_metric(key="Validation loss", value=float(val_loss), step=epoch)
 
-            if val_roc_auc > best_roc_auc:
-                best_roc_auc = val_roc_auc
-                save_checkpoint(model, optimizer, epoch, best_roc_auc,  run_id, "best_model.tar")
-                mlflow.log_metric("best_val_roc_auc", best_roc_auc)
-                print(f"New best AUC: {val_roc_auc:.4f} at epoch {epoch}")
+            if val_average_precision > best_average_precision:
+                best_average_precision = val_average_precision
+                print(f"################## Saving Best model(using avg precision) so far at {epoch} ############################")
+                save_checkpoint(model, optimizer, epoch, best_average_precision, val_loss, run_id, filename=f"{run_name}-best_model-ap.tar")
+                mlflow.log_metric("best_average_precision", float(best_average_precision))
+                print(f"New best Average Precision: {best_average_precision:.4f} at epoch {epoch}")
+                print("################### End Saving Best model(ap) ###########################\n\n")
+            
+            if val_loss < best_loss:
+                best_loss = val_loss
+                print(f"################## Saving Best model(using loss) so far at {epoch} ############################")
+                save_checkpoint(model, optimizer, epoch, val_average_precision, best_loss, run_id, filename=f"{run_name}-best_model-loss.tar")
+                mlflow.log_metric("best_val_loss", float(best_loss))
+                print(f"New best loss: {best_loss:.4f} at epoch {epoch}")
+                print("################### End Saving Best model(loss) ###########################\n\n")
 
-        
-    _, _, _ = load_checkpoint(model, optimizer, device,"best_model.tar")
+            print("------------------------------End Validation-------------------------\n\n")
 
-    train_loss, _ = test(model, train_loader, loss_fn,1000, mode="Train",should_log_cm=True)
-    validation_loss, _ = test(model, val_loader, loss_fn,1000, mode="Validation",should_log_cm=True)
-    test_loss, _ = test(model, test_loader, loss_fn,1000, mode="Test",should_log_cm=True)
-    mlflow.log_metric(key="Train Final loss", value=float(train_loss), step=1000)
-    mlflow.log_metric(key="Validation Final loss", value=float(validation_loss), step=1000)
-    mlflow.log_metric(key="Test Final loss", value=float(test_loss), step=1000)
+    print("\n\nEnd training loop.....................\n\n") 
+
+    print("Start All Evaluations..........................................\n\n")
+    print("Best Average Precision model evaluation")
+    _, _, _, _ = load_checkpoint(model, optimizer, device, filename=f"{run_name}-best_model-ap.tar")
+
+    train_loss, _ = test(model, train_loader, loss_fn, mode="Train-ap model",should_log_cm=True, Final=True)
+    validation_loss, _ = test(model, val_loader, loss_fn, mode="Validation-ap model",should_log_cm=True, Final=True)
+    test_loss, _ = test(model, test_loader, loss_fn, mode="Test-ap model",should_log_cm=True, Final=True)
+    mlflow.log_metric(key="Train Final loss-ap model", value=float(train_loss))
+    mlflow.log_metric(key="Validation Final loss-ap model", value=float(validation_loss))
+    mlflow.log_metric(key="Test Final loss-ap model", value=float(test_loss))
+
+    print("\n\nBest Loss model evaluation")
+    _, _, _, _ = load_checkpoint(model, optimizer, device, filename=f"{run_name}-best_model-loss.tar")
+
+    train_loss, _ = test(model, train_loader, loss_fn, mode="Train-loss model",should_log_cm=True, Final=True)
+    validation_loss, _ = test(model, val_loader, loss_fn, mode="Validation-loss model",should_log_cm=True, Final=True)
+    test_loss, _ = test(model, test_loader, loss_fn, mode="Test-loss model",should_log_cm=True, Final=True)
+    mlflow.log_metric(key="Train Final loss- loss model", value=float(train_loss))
+    mlflow.log_metric(key="Validation Final loss- loss model", value=float(validation_loss))
+    mlflow.log_metric(key="Test Final loss- loss model", value=float(test_loss))
     
 
 if __name__ == "__main__":
-    run_one_training(GNN_GAT_PARAMS, epochs=100)
+    args = parse_args()
+    use_pos_weight = bool(args.use_pos_weight)
+    use_weighted_sampler = bool(args.use_weighted_sampler)
+    epochs = args.epochs
+
+    print(f"Using pos_weight: {use_pos_weight}, Using weighted sampler: {use_weighted_sampler}")
+
+    run_one_training(GNN_GAT_PARAMS, epochs=epochs, use_pos_weight=use_pos_weight, use_weighted_sampler=use_weighted_sampler)
