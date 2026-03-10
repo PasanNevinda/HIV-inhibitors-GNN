@@ -32,7 +32,7 @@ In this project:
 
 ---
 
-# Example Molecule Graph
+# Example Molecule Graphs
 
 Below is an example of how a molecule is represented as a graph.
 
@@ -49,7 +49,7 @@ The model uses a **Graph Attention Network (GAT)** implemented with **PyTorch Ge
 Main components:
 
 - Node feature embedding
-- Graph Attention layers
+- Graph Attention layers with multiple heads
 - TopK pooling
 - Fully connected classification head
 - Binary classification with **BCEWithLogitsLoss**
@@ -94,20 +94,28 @@ Run the notebooks in the following order.
 notebooks/00_setup.ipynb
 ```
 
-Used to install and configure dependencies.
-
+Used to create the environment
 ---
 
-## 2. Create Dataset
+## 2. Train, Test Split
 
 ```
-notebooks/01_create_dataset.ipynb
+notebooks/01_create_datasets.ipynb
 ```
 
 This notebook:
 
 - Loads the HIV dataset and remove invalid molecules
 - create dataset for train_val and test
+
+## 3. Create Dataset ( DeepChem features ) 
+
+```
+notebooks/02_deepchem_features_datasets.ipynb
+```
+
+This notebook:
+
 - Converts **SMILES strings to graph objects**
 - Extracts **node and edge features**
 - Builds a **PyTorch Geometric dataset**
@@ -139,9 +147,6 @@ Main libraries used in this project:
 - **Scikit-learn**
 - **Pandas**
 - **NumPy**
-
-Future integration:
-
 - **DeepChem**
 
 ---
@@ -180,6 +185,110 @@ MLflow logs:
 - Validation metrics
 - Trained model artifacts
 
+# 📊 Current Model Training Results 
+
+Below are key evaluation metrics from the Graph Attention Network (GAT) model trained on the HIV inhibitor dataset.
+
+### Loss Curves
+<table align="center">
+<tr>
+<td align="center">
+<img src="images/latest results/Train loss.png" width="420"><br>
+<b>Training Loss</b><br>
+</td>
+
+<td align="center">
+<img src="images/latest results/Validation loss.png" width="420"><br>
+<b>Validation Loss</b><br>
+</td>
+</tr>
+</table>
+
+
+### ROC-AUC
+<table align="center">
+<tr>
+<td align="center">
+<img src="images/latest results/ROC-AUC-train.png" width="420"><br>
+<b>ROC-AUC (Train)</b><br>
+</td>
+
+<td align="center">
+<img src="images/latest results/ROC-AUC-Validation.png" width="420"><br>
+<b>ROC-AUC (Validation)</b><br>
+</td>
+</tr>
+</table>
+
+
+### Average Precision
+<table align="center">
+<tr>
+<td align="center">
+<img src="images/latest results/Average-Precision-train.png" width="420"><br>
+<b>Average Precision (Train)</b><br>
+</td>
+
+<td align="center">
+<img src="images/latest results/Average-Precision-Validation.png" width="420"><br>
+<b>Average Precision (Validation)</b><br>
+</td>
+</tr>
+</table>
+
+
+### Precision @ 0.5 Threshold
+<table align="center">
+<tr>
+<td align="center">
+<img src="images/latest results/Precision_at_0.5-train.png" width="420"><br>
+<b>Precision @ 0.5 (Train)</b><br>
+Correct positive predictions among predicted positives.
+</td>
+
+<td align="center">
+<img src="images/latest results/Precision_at_0.5-Validation.png" width="420"><br>
+<b>Precision @ 0.5 (Validation)</b><br>
+</td>
+</tr>
+</table>
+
+
+### Recall @ 0.5 Threshold
+<table align="center">
+<tr>
+<td align="center">
+<img src="images/latest results/Recall_at_0.5-train.png" width="420"><br>
+<b>Recall @ 0.5 (Train)</b><br>
+Percentage of true positives correctly detected.
+</td>
+
+<td align="center">
+<img src="images/latest results/Recall_at_0.5-Validation.png" width="420"><br>
+<b>Recall @ 0.5 (Validation)</b><br>
+</td>
+</tr>
+</table>
+
+
+### Final Model Performance
+
+<table align="center">
+<tr>
+<td align="center">
+<img src="images/latest results/Train-ap model_threshold_at_0.3_final.png" width="420"><br>
+<b>AP-Based Best Model</b><br>
+Selected using highest average precision.
+</td>
+
+<td align="center">
+<img src="images/latest results/Train-loss model_threshold_at_0.3_final.png" width="420"><br>
+<b>Loss-Based Best Model</b><br>
+Selected using lowest training loss.
+</td>
+</tr>
+</table>
+
 
 # Future Improvements
 
@@ -187,7 +296,6 @@ Possible improvements include:
 
 - **Graph Transformer models**
 - **Hyperparameter tuning with Optuna**
-- **Advanced molecular feature extraction using DeepChem**
 - **Better imbalance handling (Focal Loss)**
 
 ---
