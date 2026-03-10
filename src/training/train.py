@@ -4,7 +4,7 @@ import numpy as np
 
 
 from src.models.model import GNN_GAT
-from src.dataset.dataset_InMem import MoleculeInMemoryDataset
+from src.dataset.dataset_InMem_DeepChem import MoleculeInMemoryDataset_DC
 
 from tqdm import tqdm
 import mlflow.pytorch
@@ -96,8 +96,8 @@ def test(model, dataloader, loss_fun, epoch=None, mode="Validation", should_log_
 def run_one_training(params, epochs=100, use_pos_weight=False, use_weighted_sampler=False):
     
     print("loading datasets.........")
-    train_dataset = MoleculeInMemoryDataset(root=ROOT, filename="HIV_train_val.csv")
-    test_dataset = MoleculeInMemoryDataset(root=ROOT, filename="HIV_test.csv", test=True)
+    train_dataset = MoleculeInMemoryDataset_DC(root=ROOT, filename="HIV_train_val.csv")
+    test_dataset = MoleculeInMemoryDataset_DC(root=ROOT, filename="HIV_test.csv", test=True)
     
     #derived
     print("\nDerived parameters......")
@@ -125,7 +125,7 @@ def run_one_training(params, epochs=100, use_pos_weight=False, use_weighted_samp
     )
     
     print("\nLoad Checkpoint.................")
-    run_name = f"GAT-GNN- With_WeightedSampler{use_weighted_sampler} -WithPosWeigh{use_pos_weight} -Rdkit-features"
+    run_name = f"GAT-GNN- With_WeightedSampler{use_weighted_sampler} -WithPosWeigh{use_pos_weight} -DeepChem-features"
     start_epoch, best_average_precision, best_loss, saved_run_id = load_checkpoint(model, optimizer, device, filename=f"{run_name}-latest_checkpoint.tar")
     
     if saved_run_id is not None:
@@ -146,7 +146,7 @@ def run_one_training(params, epochs=100, use_pos_weight=False, use_weighted_samp
         mlflow.log_param("Use Pos weight", use_pos_weight)
         mlflow.log_param("pos_weight", float(pos_weight.item()))
 
-        mlflow.log_param("Features", "Rdkit Features")
+        mlflow.log_param("Features", "DeepChem Features")
 
     print("\n\n\nStart training loop.....................\n\n")
     for epoch in range(start_epoch, epochs):

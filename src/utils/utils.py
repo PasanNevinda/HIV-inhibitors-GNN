@@ -153,7 +153,7 @@ def get_train_val_test_loaders_posweight(train_dataset, test_dataset, val_portio
         generator=generator
     )
     print(f"train_set_size:{len(train_subset)} | val_set_size:{len(val_subset)}")
-    labels = np.array([d.y.item() for d in train_subset])
+    labels = np.array([int(d.y.item()) for d in train_subset])
     class_counts = np.bincount(labels)
     
     print(f"Class Counts: {class_counts}")
